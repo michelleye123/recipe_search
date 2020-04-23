@@ -1,0 +1,22 @@
+{
+  "name": "recipe_search",
+  "version": "1.0.0",
+  "description": "recipe search project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michelleye123/recipe_search.git"
+  },
+  "author": "Michelle Ye",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michelleye123/recipe_search/issues"
+  },
+  "homepage": "https://github.com/michelleye123/recipe_search#readme",
+  "devDependencies": {
+    "webpack": "^4.43.0"
+  }
+}
