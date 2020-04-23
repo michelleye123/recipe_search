@@ -1,4 +1,5 @@
 # dependencies
-
-# misc
 /node_modules
+
+# compiled files
+/dist/js/bundle.js
