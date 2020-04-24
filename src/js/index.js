@@ -24,6 +24,8 @@ const controlSearch = async (query="pudding") => {
         state.search = new Search(query);
         
         // prepare UI - clean old data
+        searchView.clearInput();
+        searchView.clearResults();
     
         // call search.js => API
         await state.search.getResult();

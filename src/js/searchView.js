@@ -3,6 +3,14 @@ import { elements } from './base';
 
 export const getInput = () => elements.searchInput.value;
 
+export const clearInput = () => { // if no {}, function will return a value
+    elements.searchInput.value = '';
+};
+
+export const clearResults = () => {
+    elements.searchResList.innerHTML ='';
+}
+
 const renderRecipe = recipe => {
 //    console.log(recipe);
     const markup = `
@@ -27,4 +35,4 @@ const renderRecipe = recipe => {
 export const renderResults = recipes => {
     console.log(recipes);
     recipes.forEach(renderRecipe);
-}
+};
