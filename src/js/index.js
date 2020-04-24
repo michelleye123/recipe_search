@@ -1,4 +1,6 @@
 import Search from './Search';
+import * as searchView from './searchView';
+import { elements } from './base';
 
 /* GLOBAL STATE */
 const state = {
@@ -11,10 +13,11 @@ const state = {
     // liked recipes
 }
 
-const controlSearch = async (eventObj) => {
+const controlSearch = async (query="pudding") => {
 //    console.log(eventObj,'lol u wanna search something');
     // read search query
-    const query = 'basil';
+//    const query = 'basil';
+//    const query = 'pizza' //;
 
     if (query) {
         // store search query into state
@@ -24,14 +27,16 @@ const controlSearch = async (eventObj) => {
     
         // call search.js => API
         await state.search.getResult();
+        
 
         // read + store search result
         // UI display search result
-        let s = '';
-        state.search.result.forEach( (e, i) => {
-            s += `${i}: ${e.title}.`;
-        })
-        console.log(s);
+//        let s = '';
+//        state.search.result.forEach( (e, i) => {
+//            s += `${i}: ${e.title}.`;
+//        })
+        searchView.renderResults(state.search.result);
+//        console.log(state.search.result);
         
     }
     
@@ -40,13 +45,13 @@ const controlSearch = async (eventObj) => {
 
 
 
-document.querySelector('.search').addEventListener('submit', eventObj => {
+elements.searchForm.addEventListener('submit', eventObj => {
     eventObj.preventDefault(); // prevent refresh
-    controlSearch(eventObj);
+    controlSearch(searchView.getInput());
 })
 
 /* dev */
 window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
-    controlSearch(eventObj);
+    controlSearch();
 })
