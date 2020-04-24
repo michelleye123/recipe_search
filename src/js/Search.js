@@ -1,14 +1,19 @@
-/*
-how forkify-api differs from food2fork api:
-- no API key required
-- no proxy required
-- url = forkify-api.herokuapp.com;
+import axios from 'axios';
 
-Search.js
-replace:
-const res = await axios(`${PROXY}http://food2fork.com/api/search?key=${KEY}&q=${this.query}`)
-with:
-const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
-*/
-
-export default 5;
+export default class Search {
+    constructor(query){
+        this.query = query;  
+        // this.result
+    }
+    
+    async getResult() {
+        try{
+            const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
+            this.result = res.data.recipes;
+//            console.log(this.result);
+        } catch (err) {
+            console.log(err);
+        }
+        
+    }
+}

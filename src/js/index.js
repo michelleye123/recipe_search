@@ -1,33 +1,52 @@
-// Global app controller
+import Search from './Search';
 
-import axios from 'axios';
-
-
-/*
-how forkify-api differs from food2fork api:
-- no API key required
-- no proxy required
-- url = forkify-api.herokuapp.com;
-
-Recipe.js
-replace:
-const res = await axios(`${PROXY}http://food2fork.com/api/get?key=${KEY}&rId=${this.id}`);
-with:
-const res = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
-
-Search.js
-replace:
-const res = await axios(`${PROXY}http://food2fork.com/api/search?key=${KEY}&q=${this.query}`)
-with:
-const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
-*/
-async function getResult(query) {
-    try {
-        const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${query}`);
-        console.log(res.data.recipes);
-    } catch (err) {
-        console.log('axios err:',err);
-    }
+/* GLOBAL STATE */
+const state = {
+    // search obj
+    
+    //search: search obj,
+    
+    // cur recipe
+    // shopping list
+    // liked recipes
 }
 
-getResult('basil');
+const controlSearch = async (eventObj) => {
+//    console.log(eventObj,'lol u wanna search something');
+    // read search query
+    const query = 'basil';
+
+    if (query) {
+        // store search query into state
+        state.search = new Search(query);
+        
+        // prepare UI - clean old data
+    
+        // call search.js => API
+        await state.search.getResult();
+
+        // read + store search result
+        // UI display search result
+        let s = '';
+        state.search.result.forEach( (e, i) => {
+            s += `${i}: ${e.title}.`;
+        })
+        console.log(s);
+        
+    }
+    
+    
+}
+
+
+
+document.querySelector('.search').addEventListener('submit', eventObj => {
+    eventObj.preventDefault(); // prevent refresh
+    controlSearch(eventObj);
+})
+
+/* dev */
+window.addEventListener('load', eventObj => {
+    eventObj.preventDefault(); // prevent refresh
+    controlSearch(eventObj);
+})
