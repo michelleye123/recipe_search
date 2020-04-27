@@ -8,52 +8,45 @@ import {
 
 /* GLOBAL STATE */
 const state = {
-    //search: search obj,
+    // search: search obj,
     // cur recipe
     // shopping list
     // liked recipes
 }
 
-const controlSearch = async (query = "salad") => {
-
+const controlSearch = async (query) => {
     if (query) {
-        searchView.clearInput();
-        searchView.clearResults();
+//        searchView.clearInput();
         showLoader(elements.searchRes);
 
         state.search = new Search(query);
         let status = await state.search.getResult();
 
-        //        console.log(status, state.search.result);
-        // read + store search result
-        // UI display search result
-        //        let s = '';
-        //        state.search.result.forEach( (e, i) => {
-        //            s += `${i}: ${e.title}.`;
-        //        })
-
         if (status) {
-            searchView.renderResults(state.search.result);
+            searchView.renderResults(state.search.result, 1, 5);
         } else {
-            //            alert('hmm something went wrong!');
+            searchView.clearResults();
+            // alert('hmm something went wrong!');
         }
         hideLoader();
-
-
     }
-
-
 }
-
-
 
 elements.searchForm.addEventListener('submit', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch(searchView.getInput());
 })
 
-/* dev */
+elements.searchPageButtons.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if (btn) {
+        const goToPage = parseInt(btn.dataset.goto);
+        searchView.renderResults(state.search.result, goToPage)
+    }
+});
+
+/* for dev purposes */
 window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
-    controlSearch();
+    controlSearch('salad');
 })
