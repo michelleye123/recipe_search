@@ -17,6 +17,7 @@ const clearButtons = () => {
     elements.searchPageButtons.innerHTML = '';
 }
 
+// TODO show full name on hover
 const limitRecipeTitle = (title, limit = 25) => {
     if (title.length > limit) {
         const arr = title.split(' ');
@@ -74,6 +75,8 @@ const renderButtons = (page, nRes, resPerPage) => {
     }
     //    console.log(elements.);
     elements.searchPageButtons.innerHTML = buttonHtml;
+    elements.searchPageButtons.innerHTML = buttonHtml;
+
 }
 
 export const renderResults = (recipes, page, recipesPerPage = 5) => {
@@ -84,4 +87,13 @@ export const renderResults = (recipes, page, recipesPerPage = 5) => {
     //    console.log(recipes);
     recipes.slice(start, end).forEach(renderRecipe);
     renderButtons(page, recipes.length, recipesPerPage);
+};
+
+export const highlightResult = hash => {
+    const arr = Array.from(document.querySelectorAll('.results__link--active'));
+    arr.forEach(el => {
+        el.classList.remove('results__link--active');
+    });
+
+    document.querySelector(`a[href="#${hash}"]`).classList.add('results__link--active');
 };

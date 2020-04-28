@@ -14,8 +14,8 @@ export default class Search {
             return true;
 
         } catch (err) {
-            console.log(err);
-            return;
+            console.log('Error retrieiving search results:', err);
+            return false;
         }
     }
 }
