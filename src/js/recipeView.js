@@ -14,7 +14,7 @@ const formatCount = count => {
         return new Fraction(count);
     }
     return '';
-}
+};
 
 // TODO fix various parsing errors: recurring decimals, section headings eg "For the dressing:", accept any unit after a number (eg 1 clove, 2 cans)
 const createIngred = ingO => `
@@ -29,6 +29,17 @@ const createIngred = ingO => `
         </div>
     </li>
 `;
+
+export const updateIngredAmounts = recipe => {
+    document.querySelector('.recipe__info-data--people').textContent = recipe.servings;
+//    document.querySelector(".recipe__ingredient-list").innerHTML = '';
+//    document.querySelector(".recipe__ingredient-list").insertAdjacentHTML('afterBegin', recipe.ingreds.map(el => createIngred(el)).join(''));
+
+    const countE = Array.from(document.querySelectorAll('.recipe__count'));
+    countE.forEach((el, ind) => {
+        el.textContent = formatCount(recipe.ingreds[ind].count);
+    });
+};
 
 export const renderRecipe = recipe => {
     console.log(recipe);
@@ -55,12 +66,12 @@ export const renderRecipe = recipe => {
                     <span class="recipe__info-text"> servings</span>
 
                     <div class="recipe__info-buttons">
-                        <button class="btn-tiny">
+                        <button class="btn-tiny btn-decrease">
                             <svg>
                                 <use href="img/icons.svg#icon-circle-with-minus"></use>
                             </svg>
                         </button>
-                        <button class="btn-tiny">
+                        <button class="btn-tiny btn-increase">
                             <svg>
                                 <use href="img/icons.svg#icon-circle-with-plus"></use>
                             </svg>

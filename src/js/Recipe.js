@@ -40,8 +40,21 @@ export default class Recipe {
         this.prepTime = this.ingreds.length * 2;
     }
 
-    calcServings() {
-        this.servings = 4;
+    calcServings(increment) {
+        if (increment === undefined){
+            this.servings = 4;
+        } else if (increment < 0 && this.servings <= 1 ) {
+           alert('Reached minimum servings');
+        } else {
+            this.servings += increment;
+        }
+    }
+
+    calcIngredAmounts(oldServing, newServing) {
+//        console.log(this.ingreds);
+        this.ingreds.forEach(el => {
+            el.count *= newServing / oldServing;
+        });
     }
 
     // TODO fix various parsing errors: recurring decimals, section headings eg "For the dressing:", accept any unit after a number (eg 1 clove, 2 cans)

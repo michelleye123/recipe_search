@@ -20,7 +20,6 @@ const controlSearch = async (query) => {
     if (query) {
         //        searchView.clearInput();
         showLoader(elements.searchRes);
-
         state.search = new Search(query);
         let status = await state.search.getResult();
 
@@ -32,7 +31,7 @@ const controlSearch = async (query) => {
         }
         hideLoader();
     }
-}
+};
 
 
 const controlRecipe = async () => {
@@ -56,15 +55,37 @@ const controlRecipe = async () => {
     } else {
 
     }
-}
+};
 
-
+const controlServings = (sign) => {
+    const increment = 1;
+    let oldServing = state.recipe.servings;
+    if (sign === '+') {
+        state.recipe.calcServings(increment);
+    } else if (sign === '-') {
+        state.recipe.calcServings(-increment);
+    }
+    state.recipe.calcIngredAmounts(oldServing, state.recipe.servings);
+    recipeView.updateIngredAmounts(state.recipe);
+};
 
 elements.searchForm.addEventListener('submit', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch(searchView.getInput());
-})
-elements.searchPageButtons.addEventListener('click', e => {
+});
+
+window.addEventListener('hashchange', controlRecipe);
+
+elements.recipe.addEventListener('click', e => {
+    // ".classname *" will pick up the child elements of the class
+    if (e.target.matches('.btn-increase, .btn-increase *')) {
+        controlServings('+');
+    } else if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+        controlServings('-');
+    };
+});
+
+elements.searchPageButtons.addEventListener('click', event => {
     const btn = e.target.closest('.btn-inline');
     if (btn) {
         const goToPage = parseInt(btn.dataset.goto);
@@ -72,13 +93,9 @@ elements.searchPageButtons.addEventListener('click', e => {
     }
 });
 
-window.addEventListener('hashchange', controlRecipe);
-
-
-
 
 /* for dev purposes */
 window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch('salad');
-})
+});
