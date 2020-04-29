@@ -58,18 +58,6 @@ const controlRecipe = async () => {
     }
 };
 
-const controlServings = (sign) => {
-    const increment = 1;
-    let oldServing = state.recipe.servings;
-    if (sign === '+') {
-        state.recipe.calcServings(increment);
-    } else if (sign === '-') {
-        state.recipe.calcServings(-increment);
-    }
-    state.recipe.calcIngredAmounts(oldServing, state.recipe.servings);
-    recipeView.updateIngredAmounts(state.recipe);
-};
-
 const controlShoplist = () => {
     if (!state.shoplist) state.shoplist = new Shoplist();
     
@@ -91,8 +79,10 @@ elements.recipe.addEventListener('click', e => {
     // ".classname *" will pick up the child elements of the class
     if (e.target.matches('.btn-increase, .btn-increase *')) {
         controlServings('+');
+        recipeView.updateIngredAmounts(state.recipe);
     } else if (e.target.matches('.btn-decrease, .btn-decrease *')) {
         controlServings('-');
+        recipeView.updateIngredAmounts(state.recipe);
     }else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')){
         controlShoplist();
     };
@@ -105,7 +95,7 @@ elements.shopping.addEventListener('click', e => {
         state.shoplist.deleteItem(id);
     }else if (e.target.matches('.shopping__count-value')){
         const val = parseFloat(e.target.value);
-        state.list.updateCount(id, val);
+        state.shoplist.updateCount(id, val);
     
     };
 });

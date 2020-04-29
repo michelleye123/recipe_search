@@ -32,8 +32,6 @@ const createIngred = ingO => `
 
 export const updateIngredAmounts = recipe => {
     document.querySelector('.recipe__info-data--people').textContent = recipe.servings;
-//    document.querySelector(".recipe__ingredient-list").innerHTML = '';
-//    document.querySelector(".recipe__ingredient-list").insertAdjacentHTML('afterBegin', recipe.ingreds.map(el => createIngred(el)).join(''));
 
     const countE = Array.from(document.querySelectorAll('.recipe__count'));
     countE.forEach((el, ind) => {

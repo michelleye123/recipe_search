@@ -41,21 +41,32 @@ export default class Recipe {
     }
 
     calcServings(increment) {
-        if (increment === undefined){
+        if (increment === undefined) {
             this.servings = 4;
-        } else if (increment < 0 && this.servings <= 1 ) {
-           alert('Reached minimum servings');
+        } else if (increment < 0 && this.servings <= 1) {
+            alert('Reached minimum servings');
         } else {
             this.servings += increment;
         }
     }
 
     calcIngredAmounts(oldServing, newServing) {
-//        console.log(this.ingreds);
+        //        console.log(this.ingreds);
         this.ingreds.forEach(el => {
             el.count *= newServing / oldServing;
         });
     }
+
+    controlServings(sign) {
+        const increment = 1;
+        let oldServing = this.servings;
+        if (sign === '+') {
+            this.calcServings(increment);
+        } else if (sign === '-') {
+            this.calcServings(-increment);
+        }
+        this.calcIngredAmounts(oldServing, state.recipe.servings);
+    };
 
     // TODO fix various parsing errors: recurring decimals, section headings eg "For the dressing:", accept any unit after a number (eg 1 clove, 2 cans)
     parseIngreds() {
