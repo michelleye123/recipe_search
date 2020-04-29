@@ -1,7 +1,9 @@
 import Search from './Search';
 import Recipe from './Recipe';
+import Shoplist from './Shoplist';
 import * as searchView from './searchView';
 import * as recipeView from './recipeView';
+import * as shoplistView from './shoplistView';
 import {
     elements,
     showLoader,
@@ -12,7 +14,7 @@ import {
 const state = {
     // state.search
     // state.recipe
-    // shopping list
+    // state.shoplist
     // liked recipes
 }
 
@@ -32,7 +34,6 @@ const controlSearch = async (query) => {
         hideLoader();
     }
 };
-
 
 const controlRecipe = async () => {
     const hash = window.location.hash.replace('#', '');
@@ -69,6 +70,16 @@ const controlServings = (sign) => {
     recipeView.updateIngredAmounts(state.recipe);
 };
 
+const controlShoplist = () => {
+    if (!state.shoplist) state.shoplist = new Shoplist();
+    
+    state.recipe.ingreds.forEach( e => {
+        const item = state.shoplist.addItem(e.count, e.unit, e.ing);
+        shoplistView.renderItem(item);
+    })
+}
+
+
 elements.searchForm.addEventListener('submit', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch(searchView.getInput());
@@ -82,10 +93,24 @@ elements.recipe.addEventListener('click', e => {
         controlServings('+');
     } else if (e.target.matches('.btn-decrease, .btn-decrease *')) {
         controlServings('-');
+    }else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')){
+        controlShoplist();
     };
 });
 
-elements.searchPageButtons.addEventListener('click', event => {
+elements.shopping.addEventListener('click', e => {
+    const id = e.target.closest('.shopping__item').dataset.itemid;
+    if (e.target.matches('.shopping__delete, .shopping__delete *')){
+        shoplistView.deleteItem(id);
+        state.shoplist.deleteItem(id);
+    }else if (e.target.matches('.shopping__count-value')){
+        const val = parseFloat(e.target.value);
+        state.list.updateCount(id, val);
+    
+    };
+});
+
+elements.searchPageButtons.addEventListener('click', e => {
     const btn = e.target.closest('.btn-inline');
     if (btn) {
         const goToPage = parseInt(btn.dataset.goto);
@@ -99,3 +124,5 @@ window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch('salad');
 });
+
+
