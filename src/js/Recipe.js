@@ -65,7 +65,7 @@ export default class Recipe {
         } else if (sign === '-') {
             this.calcServings(-increment);
         }
-        this.calcIngredAmounts(oldServing, state.recipe.servings);
+        this.calcIngredAmounts(oldServing, this.servings);
     };
 
     // TODO fix various parsing errors: recurring decimals, section headings eg "For the dressing:", accept any unit after a number (eg 1 clove, 2 cans)

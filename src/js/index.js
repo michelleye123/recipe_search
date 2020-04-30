@@ -1,9 +1,11 @@
 import Search from './Search';
 import Recipe from './Recipe';
 import Shoplist from './Shoplist';
+import Likes from './Likes';
 import * as searchView from './searchView';
 import * as recipeView from './recipeView';
 import * as shoplistView from './shoplistView';
+import * as likesView from './likesView';
 import {
     elements,
     showLoader,
@@ -15,7 +17,7 @@ const state = {
     // state.search
     // state.recipe
     // state.shoplist
-    // liked recipes
+    // state.likes
 }
 
 const controlSearch = async (query) => {
@@ -49,6 +51,7 @@ const controlRecipe = async () => {
             state.recipe.parseIngreds();
             //            console.log(state.recipe.ingreds);
             recipeView.renderRecipe(state.recipe);
+            if (state.like) likesView.toggleRecipeLikeBtn(state.like.isLiked(state.recipe.id));
         } else {
             // 
         }
@@ -60,13 +63,24 @@ const controlRecipe = async () => {
 
 const controlShoplist = () => {
     if (!state.shoplist) state.shoplist = new Shoplist();
-    
-    state.recipe.ingreds.forEach( e => {
+
+    state.recipe.ingreds.forEach(e => {
         const item = state.shoplist.addItem(e.count, e.unit, e.ing);
         shoplistView.renderItem(item);
     })
 }
 
+const controlLikes = () => {
+    const id = state.recipe.id;
+    if (!state.like) state.like = new Likes();
+
+    const like = state.like.toggleLike(state.recipe);
+    const liked = state.like.isLiked(state.recipe.id);
+
+    if (liked) likesView.addToLikeMenu(like);
+    likesView.toggleRecipeLikeBtn(liked);
+    likesView.toggleLikeMenu(state.like.getNumLikes() > 0);
+}
 
 elements.searchForm.addEventListener('submit', eventObj => {
     eventObj.preventDefault(); // prevent refresh
@@ -77,26 +91,30 @@ window.addEventListener('hashchange', controlRecipe);
 
 elements.recipe.addEventListener('click', e => {
     // ".classname *" will pick up the child elements of the class
-    if (e.target.matches('.btn-increase, .btn-increase *')) {
-        controlServings('+');
+    const t = e.target;
+    console.log(state.recipe);
+//    console.log(e.target.matches, clickedOn);
+    if (t.matches('.btn-increase, .btn-increase *')) {
+        state.recipe.controlServings('+');
         recipeView.updateIngredAmounts(state.recipe);
-    } else if (e.target.matches('.btn-decrease, .btn-decrease *')) {
-        controlServings('-');
+    } else if (t.matches('.btn-decrease, .btn-decrease *')) {
+        state.recipe.controlServings('-');
         recipeView.updateIngredAmounts(state.recipe);
-    }else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')){
+    } else if (t.matches('.recipe__btn--add, .recipe__btn--add *')) {
         controlShoplist();
+    } else if (t.matches('.recipe__love, .recipe__love *')) {
+        controlLikes();
     };
 });
 
 elements.shopping.addEventListener('click', e => {
     const id = e.target.closest('.shopping__item').dataset.itemid;
-    if (e.target.matches('.shopping__delete, .shopping__delete *')){
+    if (e.target.matches('.shopping__delete, .shopping__delete *')) {
         shoplistView.deleteItem(id);
         state.shoplist.deleteItem(id);
-    }else if (e.target.matches('.shopping__count-value')){
+    } else if (e.target.matches('.shopping__count-value')) {
         const val = parseFloat(e.target.value);
         state.shoplist.updateCount(id, val);
-    
     };
 });
 
@@ -114,5 +132,3 @@ window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
     controlSearch('salad');
 });
-
-

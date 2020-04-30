@@ -18,7 +18,7 @@ const clearButtons = () => {
 }
 
 // TODO show full name on hover
-const limitRecipeTitle = (title, limit = 25) => {
+export const limitRecipeTitle = (title, limit = 25) => {
     if (title.length > limit) {
         const arr = title.split(' ');
         const newarr = [];
@@ -95,5 +95,5 @@ export const highlightResult = hash => {
         el.classList.remove('results__link--active');
     });
 
-    document.querySelector(`a[href="#${hash}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href="#${hash}"]`).classList.add('results__link--active');
 };
