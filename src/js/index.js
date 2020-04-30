@@ -72,14 +72,16 @@ const controlShoplist = () => {
 
 const controlLikes = () => {
     const id = state.recipe.id;
-    if (!state.like) state.like = new Likes();
+    //    if (!state.like) state.like = new Likes();
 
-    const like = state.like.toggleLike(state.recipe);
-    const liked = state.like.isLiked(state.recipe.id);
+    const like = state.likes.toggleLike(state.recipe);
+    const liked = state.likes.isLiked(state.recipe.id);
 
-    if (liked) likesView.addToLikeMenu(like);
+    console.log('80', liked);
+
+    liked ? likesView.addToLikeMenu(like) : likesView.removeFromLikeMenu(state.recipe.id);
     likesView.toggleRecipeLikeBtn(liked);
-    likesView.toggleLikeMenu(state.like.getNumLikes() > 0);
+    likesView.toggleLikeMenu(state.likes.getNumLikes() > 0);
 }
 
 elements.searchForm.addEventListener('submit', eventObj => {
@@ -93,7 +95,7 @@ elements.recipe.addEventListener('click', e => {
     // ".classname *" will pick up the child elements of the class
     const t = e.target;
     console.log(state.recipe);
-//    console.log(e.target.matches, clickedOn);
+    //    console.log(e.target.matches, clickedOn);
     if (t.matches('.btn-increase, .btn-increase *')) {
         state.recipe.controlServings('+');
         recipeView.updateIngredAmounts(state.recipe);
@@ -126,9 +128,13 @@ elements.searchPageButtons.addEventListener('click', e => {
     }
 });
 
-
-/* for dev purposes */
 window.addEventListener('load', eventObj => {
     eventObj.preventDefault(); // prevent refresh
-    controlSearch('salad');
+    controlSearch('salad'); // for dev purposes
+    state.likes = new Likes();
+    //    console.log(1, state.likes);
+    state.likes.readStorage();
+    //    console.log(2, state.likes);
+    likesView.toggleLikeMenu(state.likes.getNumLikes() > 0);
+    state.likes.likes.forEach(like => likesView.addToLikeMenu(like));
 });

@@ -15,6 +15,7 @@ export default class Search {
 
         } catch (err) {
             console.log('Error retrieiving search results:', err);
+            alert(`Regrettably, there are no recipes for ${this.query} at this time :-(`);
             return false;
         }
     }

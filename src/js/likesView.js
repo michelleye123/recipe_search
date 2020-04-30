@@ -1,9 +1,13 @@
-import {elements} from './base';
-import { limitRecipeTitle } from './searchView';
+import {
+    elements
+} from './base';
+import {
+    limitRecipeTitle
+} from './searchView';
 
 export const toggleRecipeLikeBtn = show => {
     const icon = show ? 'icon-heart' : 'icon-heart-outlined';
-    document.querySelector('.recipe__love use').setAttribute('href', 'img/icons.svg#'+icon);
+    document.querySelector('.recipe__love use').setAttribute('href', 'img/icons.svg#' + icon);
 }
 
 export const toggleLikeMenu = show => {
@@ -28,4 +32,10 @@ export const addToLikeMenu = like => {
     elements.likesList.insertAdjacentHTML('afterBegin', markup);
 }
 
-// TODO fix bug of retrieval of recipe from a different page...
+export const removeFromLikeMenu = id => {
+    const el = document.querySelector(`.likes__link[href*="${id}"]`);
+    if (el) el.parentElement.removeChild(el);
+}
+
+
+// TODO fix bug of retrieval of recipe from a different page or more general case of not being in current search.

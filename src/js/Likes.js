@@ -4,11 +4,14 @@ export default class Likes {
     }
 
     toggleLike(recipe) {
+        let like;
         if (this.isLiked(recipe.id)) {
             this._deleteLike(recipe.id);
         } else {
-            return this._addLike(recipe.id, recipe.title, recipe.author, recipe.img);
+            like = this._addLike(recipe.id, recipe.title, recipe.author, recipe.img);
         }
+        localStorage.setItem('likes',JSON.stringify(this.likes));
+        return like;
     }
 
     isLiked(id) {
@@ -35,4 +38,8 @@ export default class Likes {
         return this.likes.length;
     }
 
+    readStorage (){
+        const s = JSON.parse(localStorage.getItem('likes'));
+        if (s) this.likes = s;
+    }
 }
